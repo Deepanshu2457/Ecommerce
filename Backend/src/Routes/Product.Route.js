@@ -50,6 +50,16 @@ route.get("/product/:id", async (req,res)=>{
 
 route.delete("/product/:id", async (req,res)=>{
 
-
+    try {
+            const {id} = req.params 
+            const productDeleteById = await Product.findByIdAndDelete(id)
+            if(!productDeleteById){
+                throw new Error("Something was Wrong")
+            }
+             res.status(200).json({success:true , data : productDeleteById})
+    } catch (error) {
+        res.status(400).json({success:false ,error:error.message})
+        
+    }
 })
 module.exports={ProductRoute : route}
