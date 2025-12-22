@@ -4,7 +4,11 @@ const route = express.Router()
 const validator = require("validator")
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
-route.post("signup" , async  (req,res)=>{
+
+
+
+
+route.post("/signup" , async  (req,res)=>{
 
     try {
          const {firstName, lastName, userName , profilepicture , password,mobileNo,role } = req.body
@@ -15,14 +19,23 @@ route.post("signup" , async  (req,res)=>{
         throw new Error("Please Enter Your lastname ")
     }
       if(!userName || userName.length < 2 || userName.length > 25){
-        throw new Error("Please Enter Your username ")
+        throw new Error("Please Enters Your naam")
     }
-       if(!profilepicture || !validator.isUrl(profilepicture)){
-        throw new Error("Please Enter Your username ")
-    }
-       if(!mobileNo || !validator.isMobilePhone(mobileNo , "en-IN")){
-        throw new Error("Please Enter Your username ")
-    }
+    //    if(!profilepicture || !validator.isUrl(profilepicture)){
+    //     throw new Error(" please Enter valid image ")
+    // }
+//     if ( !profilepicture ||!validator.isURL(profilepicture, {
+//     protocols: ['http', 'https'],
+//     require_protocol: true
+//   })
+// ) {
+//   throw new Error("Please enter a valid image URL");
+// }
+    if (!mobileNo ||!validator.isMobilePhone(mobileNo.toString(), "en-IN"))
+         {
+  throw new Error("Please enter a valid mobile number");
+}
+
       if(!role || !["saler","buyer"] .includes(role))
         {
             throw new Error(" you can create either buyer or seller account ")
@@ -35,7 +48,7 @@ route.post("signup" , async  (req,res)=>{
 
      const isPersentUserName = await User.findOne({userName : userName.toLowerCase()})
 
-     if(!isPersentUserName){
+     if(isPersentUserName){
         throw new Error(" user already Exist")
      }
     const hashPassword = await bcrypt.hash(password ,10)
@@ -71,7 +84,8 @@ route.post("/signin" , async (req,res)=>{
  
          const token = jwt.sign({id : founduser._id}, process.env.JWT_SECRET)
          const {firstName,lastName, userName :un , profilepicture,mobile,role}=  founduser
-         res.cookie("loginToken", token, {maxAge : 24*60*60*1000}.status(200).json({sucess : true , message : "login ",message : "login" ,sucess : true , userData : firstName,lastName,userName:un , profilepicture,mobile ,role}))
+         res.cookie("loginToken", token, {maxAge : 24*60*60*1000}).status(200)
+         .json({success : true , message : "login ",userData : firstName,lastName,userName:un , profilepicture,mobile ,role})
 
          
     } catch (error) {
@@ -82,6 +96,6 @@ route.post("/signin" , async (req,res)=>{
   
 })
   route.post("/signout",(req,res)=>{
-        res.cokkie("loginToken",null).status(200).json({sucess : true , message : "logout"})
+        res.cookie("loginToken",null).status(200).json({sucess : true , message : "logout"})
     })
 module.exports = {userRoute : route}

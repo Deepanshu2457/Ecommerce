@@ -17,9 +17,9 @@ route.post("/product-create" ,async (req,res)=>{
           if(!quantity){
             throw new Error("Product quantity is required")
           }
-          if(!validator.isURL(image)){
-            throw new Error("Please provide a valid image URL")
-          }
+        //   if(!validator.isURL(image)){
+        //     throw new Error("Please provide a valid image URL")
+        //   }
          if (!category) {
              throw new Error("Product category is required")
           }
@@ -62,60 +62,21 @@ route.delete("/product/:id", async (req,res)=>{
         
     }
 })
-route.delete("/product/:id", async (req,res)=>{
 
+route.patch("/product/edit/:id", async (req,res)=>{
     try {
-            const {id} = req.params 
-            const productDeleteById = await Product.findByIdAndDelete(id)
-            if(!productDeleteById){
-                throw new Error("Something was Wrong")
-            }
-             res.status(200).json({success:true , data : productDeleteById})
-    } catch (error) {
-        res.status(400).json({success:false ,error:error.message})
-        
-    }
-})
-route.delete("/product/:id", async (req,res)=>{
+            const {id} = req.params
+      const {name,price,quantity,desc,category}=req.body
 
-    try {
-            const {id} = req.params 
-            const productDeleteById = await Product.findByIdAndDelete(id)
-            if(!productDeleteById){
-                throw new Error("Something was Wrong")
-            }
-             res.status(200).json({success:true , data : productDeleteById})
-    } catch (error) {
-        res.status(400).json({success:false ,error:error.message})
-        
-    }
-})
-route.delete("/product/:id", async (req,res)=>{
+      const updateProduct = await Product.findByIdAndUpdate(id,{name,price,quantity,desc,category},{new:true})
 
-    try {
-            const {id} = req.params 
-            const productDeleteById = await Product.findByIdAndDelete(id)
-            if(!productDeleteById){
-                throw new Error("Something was Wrong")
-            }
-             res.status(200).json({success:true , data : productDeleteById})
-    } catch (error) {
-        res.status(400).json({success:false ,error:error.message})
-        
-    }
-})
-route.delete("/product/:id", async (req,res)=>{
+      res.status(200).json({success:true , data:updateProduct})
 
-    try {
-            const {id} = req.params 
-            const productDeleteById = await Product.findByIdAndDelete(id)
-            if(!productDeleteById){
-                throw new Error("Something was Wrong")
-            }
-             res.status(200).json({success:true , data : productDeleteById})
     } catch (error) {
-        res.status(400).json({success:false ,error:error.message})
-        
+        res.status(400).json({success:false , error : error.message})
     }
+  
 })
+
+
 module.exports={ProductRoute : route}

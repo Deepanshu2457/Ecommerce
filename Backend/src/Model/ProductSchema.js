@@ -24,14 +24,14 @@ const productSchema = new mongoose.Schema({
     },
     image : {
         type : String,
-        required : true ,
+        // required : true ,
 
-        validate : (val)=>{
-            const isUrl = validator.isUrl(val)
-            if(!isUrl){
-                throw new error("invalid Email")
-            }
-        }
+        // validate : (val)=>{
+        //     const isUrl = validator.isUrl(val)
+        //     if(!isUrl){
+        //         throw new error("invalid Email")
+        //     }
+        // }
     },
     category : {
         type : String,

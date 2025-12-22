@@ -23,8 +23,6 @@ const UserSchema= new mongoose.Schema({
     },
     password : {
         type : String,
-        maxlength : 15,
-        minlength : 8,
         required : true
 
     },
@@ -48,7 +46,7 @@ const UserSchema= new mongoose.Schema({
         required : true,
       
         validate : (val)=>{
-            const isMobile = validator.isMobilePhone(val , " en-IN")
+            const isMobile = validator.isMobilePhone(val , "en-IN")
             if(!isMobile){
                 throw new error(" Enter a valid Phone Number")
             }
